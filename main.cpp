@@ -1,23 +1,12 @@
 #include <iostream>
 #include "threadpool.h"
 
-int add(int a, int b)
+int heavy_task(int id)
 {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    return a + b;
-}
-
-std::string concat_str(std::string a, std::string b)
-{
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    return a + b;
-}
-
-// 任务 3：无返回值 (void)
-void heavy_task(int id)
-{
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    std::cout << "任务 " << id << " 执行完毕（无返回值）" << std::endl;
+    // 让每个任务睡 10 毫秒，模拟真实工作负载
+    // 2000 个任务单线程需要 20 秒，看我们的线程池能压缩到多少！
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    return id * id; // 返回平方值用于后续校验
 }
 
 int main(int argc, char const *argv[])
@@ -26,15 +15,35 @@ int main(int argc, char const *argv[])
     pool.set_mode(poolmode::mode_cached);
     pool.start();
 
-    std::cout << "=== 开始疯狂提交不同类型的任务 ===" << std::endl;
+    int task_count = 2000;
+    std::vector<Result> results;
+    results.reserve(task_count);
 
-    Result res1 = pool.sumbit_task(add, 10, 20);
-    Result res2 = pool.sumbit_task(concat_str, "Hello, ", "Threadpool!");
-    Result res3 = pool.sumbit_task(heavy_task, 99);
-    std::cout << "=== 任务提交完毕，主线程开始获取结果 ===" << std::endl;
-    int sum = res1.get<int>();
-    std::string str = res2.get<std::string>();
-    std::cout << "加法结果: " << sum << std::endl;
-    std::cout << "拼接结果: " << str << std::endl;
+    auto start_time = std::chrono::high_resolution_clock::now();
+
+    std::cout << ">>> 正在疯狂提交 " << task_count << " 个任务..." << std::endl;
+    for (int i = 0; i < task_count; i++)
+    {
+        results.push_back(pool.sumbit_task(heavy_task, i));
+    }
+    std::cout << ">>> 所有任务已提交完毕，等待消费者处理..." << std::endl;
+    long long total_sum = 0;
+    for (int i = 0; i < task_count; i++)
+    {
+        total_sum += results[i].get<int>();
+    }
+
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> diff = end_time - start_time;
+
+    std::cout << "处理总任务数: " << task_count << std::endl;
+    std::cout << "前5个任务结果校验: ";
+    for (int i = 0; i < 5; i++)
+        std::cout << results[i].get<int>() << " ";
+    std::cout << "\n总耗时: " << diff.count() << " 秒" << std::endl;
+
+    std::cout << "\n>>> 压测结束，主线程休眠 65 秒..." << std::endl;
+    std::cout << ">>> 请观察终端：闲置线程是否会自动销毁，直到剩下 4 个！" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(65));
     return 0;
 }

@@ -103,6 +103,7 @@ public:
     void set_val(Any val)
     {
         state->any = std::move(val);
+        state->is_ready = true;
         state->sem.post();
     }
 
@@ -110,7 +111,10 @@ public:
     template <typename T>
     T get()
     {
-        state->sem.wait();
+        if (!state->is_ready)
+        {
+            state->sem.wait();
+        }
         return state->any.any_cast<T>();
     }
 
@@ -119,6 +123,7 @@ private:
     {
         Any any;      // 任务返回值
         Semahore sem; // 线程通信信号量
+        std::atomic<bool> is_ready{false};
     };
     std::shared_ptr<SharedState> state;
 };

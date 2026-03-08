@@ -148,6 +148,10 @@ void Threadpool::threadFunc(int thread_id)
                     my_thread->set_running(false);
                 break;
             }
+            if (tasks.empty())
+            {
+                continue;
+            }
 
             // 4. 取任务 (Pop)
             task = tasks.front();
