@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++.exe 构建整个项目",
+            "command": "C:/msys64/ucrt64/bin/g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "*.cpp",
+                "-o",
+                "${fileDirname}\\main.exe",
+                
+                "-I", "C:/Program Files/MySQL/MySQL Server 8.0/include",  // 告诉编译器头文件在哪
+                "-L", "C:/Program Files/MySQL/MySQL Server 8.0/lib",      // 告诉链接器库文件在哪
+             "-lmysql"                                                 // 告诉链接器具体链接哪个库 
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "编译当前目录下所有 cpp 文件。"
+        }
+    ]
+}

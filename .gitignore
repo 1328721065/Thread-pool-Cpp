@@ -1,0 +1,95 @@
+########################################################
+# 🧱 C++ 项目忽略规则（来自 GitHub 官方 C++.gitignore）
+########################################################
+
+# 编译中间文件
+*.slo
+*.lo
+*.o
+*.obj
+
+# 预编译头文件
+*.gch
+*.pch
+
+# 静态 / 动态库文件
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+
+# 可执行文件
+*.exe
+*.out
+*.app
+
+# 调试符号与日志
+*.pdb
+*.idb
+*.dSYM/
+*.log
+
+# CMake 构建缓存与文件夹
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+build/
+bin/
+dist/
+
+########################################################
+# 🧰 Visual Studio Code 忽略规则
+########################################################
+
+# 忽略 VS Code 自动生成的文件，但保留项目配置
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+########################################################
+# 💻 Windows 系统文件（来自 GitHub 官方 Global/Windows.gitignore）
+########################################################
+
+# Windows 缓存与回收站
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Windows 临时文件
+*.tmp
+*.temp
+*.bak
+*.swp
+*.lnk
+
+########################################################
+# ⚙️ 其他常见忽略项
+########################################################
+
+# Python cache（若混合项目）
+__pycache__/
+*.pyc
+
+# 日志与临时文件
+*.log
+*.cache
+*.vs/
+*.idea/
+
+# 备份文件
+*.bak
+*~
+
+# Git 自身的备份冲突标志
+*.orig
+
